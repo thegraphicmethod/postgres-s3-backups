@@ -2,7 +2,6 @@
 
 set -o errexit -o nounset -o pipefail
 
-export AWS_PAGER=""
 
 s3() {
     aws s3 --region "$AWS_REGION" "$@"
@@ -55,10 +54,21 @@ upload_to_bucket() {
     s3 cp - "s3://$S3_BUCKET_NAME/$(date +%Y/%m/%d/backup-%H-%M-%S.sql.gz)"
 }
 
-main() {
+copy_remote_backup() {
+    # ssh srv-cu4f9dtds78s739snp50@ssh.frankfurt.render.com
+    mkdir tmpImages
+    rsync -avz -e "ssh -i /etc/secrets/id_rsa_test_server" srv-cu4f9dtds78s739snp50@ssh.frankfurt.render.com:/opt/render/project/src/public/uploads/ tmpImages
+    s3 cp ./tmpImages "s3://$S3_BUCKET_NAME/images/$(date +%Y/%m/%d)" --recursive
+    rm -rf tmpImages/*
+    rmdir tmpImages
+    
+}
+
+main() {    
     ensure_bucket_exists
     echo "Taking backup and uploading it to S3..."
     pg_dump_database | gzip | upload_to_bucket
+    copy_remote_backup
     echo "Done."
 }
 

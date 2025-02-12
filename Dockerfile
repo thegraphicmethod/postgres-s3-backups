@@ -3,7 +3,9 @@ FROM alpine:${ALPINE_VERSION} as alpine
 
 ARG POSTGRES_VERSION
 RUN apk add --no-cache postgresql$POSTGRES_VERSION-client \
-      aws-cli
+      aws-cli \
+      rsync
+
 WORKDIR /scripts
 
 COPY backup.sh .
