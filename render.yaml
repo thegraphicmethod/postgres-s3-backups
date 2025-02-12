@@ -33,4 +33,7 @@ services:
       # For example, 3.20
       - key: ALPINE_VERSION
         sync: false
+      - key: REMOTE_FILES_PATH
+        sync: false
+     
 

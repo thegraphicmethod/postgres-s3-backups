@@ -57,7 +57,7 @@ upload_to_bucket() {
 copy_remote_backup() {
     # ssh srv-cu4f9dtds78s739snp50@ssh.frankfurt.render.com
     mkdir tmpImages
-    rsync -avz -e "ssh -i /etc/secrets/id_rsa_test_server" srv-cu4f9dtds78s739snp50@ssh.frankfurt.render.com:/opt/render/project/src/public/uploads/ tmpImages
+    rsync -avz -e "ssh -i /etc/secrets/id_rsa_test_server" $REMOTE_FILES_PATH tmpImages
     s3 cp ./tmpImages "s3://$S3_BUCKET_NAME/images/$(date +%Y/%m/%d)" --recursive
     rm -rf tmpImages/*
     rmdir tmpImages
