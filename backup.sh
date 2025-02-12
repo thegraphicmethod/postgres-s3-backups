@@ -61,6 +61,7 @@ copy_remote_backup() {
     s3 cp ./tmpImages "s3://$S3_BUCKET_NAME/images/$(date +%Y/%m/%d)" --recursive
     rm -rf tmpImages/*
     rmdir tmpImages
+    echo "Done. copy remote images to s3"
     
 }
 
