@@ -45,13 +45,13 @@ ensure_bucket_exists() {
 }
 
 pg_dump_database() {
-    pg_dump  --no-owner --no-privileges --clean --if-exists --quote-all-identifiers -Fd  "$DATABASE_URL"
+    pg_dump  --no-owner --no-privileges --clean --if-exists --quote-all-identifiers -Ft  "$DATABASE_URL"
 }
 
 upload_to_bucket() {
     # if the zipped backup file is larger than 50 GB add the --expected-size option
     # see https://docs.aws.amazon.com/cli/latest/reference/s3/cp.html
-    s3 cp - "s3://$S3_BUCKET_NAME/$(date +%Y/%m/%d/backup-%H-%M-%S.sql.gz)"
+    s3 cp - "s3://$S3_BUCKET_NAME/$(date +%Y/%m/%d/backup-%H-%M-%S.dir.tar.gz)"
 }
 
 copy_remote_backup() {
